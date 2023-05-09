@@ -109,10 +109,6 @@ function takeObject(idx) {
     dropObject(idx);
     return ret;
 }
-
-function getArrayU8FromWasm0(ptr, len) {
-    return getUint8Memory0().subarray(ptr / 1, ptr / 1 + len);
-}
 /**
 * @param {string} message
 * @param {string} salt
@@ -120,7 +116,7 @@ function getArrayU8FromWasm0(ptr, len) {
 * @param {number} memory
 * @param {number} parallelism
 * @param {number} length
-* @returns {Uint8Array}
+* @returns {string}
 */
 export function argon2id_hash(message, salt, iterations, memory, parallelism, length) {
     try {
@@ -134,14 +130,16 @@ export function argon2id_hash(message, salt, iterations, memory, parallelism, le
         var r1 = getInt32Memory0()[retptr / 4 + 1];
         var r2 = getInt32Memory0()[retptr / 4 + 2];
         var r3 = getInt32Memory0()[retptr / 4 + 3];
+        var ptr2 = r0;
+        var len2 = r1;
         if (r3) {
+            ptr2 = 0; len2 = 0;
             throw takeObject(r2);
         }
-        var v2 = getArrayU8FromWasm0(r0, r1).slice();
-        wasm.__wbindgen_free(r0, r1 * 1);
-        return v2;
+        return getStringFromWasm0(ptr2, len2);
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
+        wasm.__wbindgen_free(ptr2, len2);
     }
 }
 
