@@ -1,7 +1,5 @@
 import init, {argon2id_hash} from "./argon2id_wasm.js";
 
-await init();
-
 export default class Argon2id{
 
 	static hexToBase64(hexstring) {
@@ -56,18 +54,25 @@ export default class Argon2id{
 
 			Argon2idWorker.onmessage = ({data}) => {
 				Argon2idWorker.terminate();
-				res(data);
+				if(data.error) rej(data.error);
+				res(data.output);
 			}
 
 			Argon2idWorker.postMessage([message, salt, t, m, p, l]);
 		}else{
-			res(argon2id_hash(message, salt, t, m, p, l));
+			init().then(() => {
+				res(argon2id_hash(message, salt, t, m, p, l));
+			}).catch(err => {
+				rej(err);
+			});
 		}
 	});
 
 	static hashEncoded = (message, salt = Argon2id.randomSalt(), t=2, m=32, p=3, l=32) => new Promise((res, rej) => {
 		this.hash(message, salt, t, m, p, l).then(output => {
 			res(`$argon2id$v=19$m=${m},t=${t},p=${p}$${btoa(salt).replaceAll("=", "")}$${this.hexToBase64(output).replaceAll("=", "")}`);
+		}).catch(err => {
+			rej(err);
 		});
 	});
 
@@ -94,6 +99,8 @@ export default class Argon2id{
 
 		Argon2id.hash(message, salt, t, m, p, digest.length/2).then(output => {
 			res(output === digest);
+		}).catch(err => {
+			rej(err);
 		});
 	});
 }

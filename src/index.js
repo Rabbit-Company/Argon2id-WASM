@@ -17,6 +17,9 @@ document.getElementById('start').addEventListener('click', () => {
 		let timerEnd = calcT(timerStart);
 		document.getElementById('hash').innerHTML = "<b>Hash:</b> " + hashHex + "<br/><b>Hash Encoded:</b> " + hashEncoded;
 		document.getElementById('perf').innerHTML = "Hashing the message took <b>" + timerEnd + "ms</b>.";
+	}).catch(err => {
+		document.getElementById('hash').innerHTML = `Hashing failed because of <b>${err}</b>`;
+		document.getElementById('perf').innerHTML = "";
 	});
 });
 
@@ -32,6 +35,9 @@ document.getElementById('verify').addEventListener('click', () => {
 		if(!match) document.getElementById('validate').innerHTML = "The message does <b>NOT</b> match the supplied hash.";
 
 		document.getElementById('perf').innerHTML = "Verifying the message took <b>" + timerEnd + "ms</b>.";
+	}).catch(err => {
+		document.getElementById('validate').innerHTML = `Validation failed because of <b>${err}</b>`;
+		document.getElementById('perf').innerHTML = "";
 	});
 });
 
