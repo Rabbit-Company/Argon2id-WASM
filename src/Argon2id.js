@@ -50,22 +50,33 @@ export default class Argon2id{
 		return salt.join("");
 	}
 
-	static hash(message, salt = Argon2id.randomSalt(), t=2, m=32, p=3, l=32){
-		let output = argon2id_hash(message, salt, t, m, p, l);
-		return output;
-	}
+	static hash = (message, salt = Argon2id.randomSalt(), t=2, m=32, p=3, l=32) => new Promise((res, rej) => {
+		if(window.Worker){
+			const Argon2idWorker = new Worker("Argon2idWorker.js", { type: 'module' });
 
-	static hashEncoded(message, salt = Argon2id.randomSalt(), t=2, m=32, p=3, l=32){
-		let output = argon2id_hash(message, salt, t, m, p, l);
-		return `$argon2id$v=19$m=${m},t=${t},p=${p}$${btoa(salt).replaceAll("=", "")}$${this.hexToBase64(output).replaceAll("=", "")}`;
-	}
+			Argon2idWorker.onmessage = ({data}) => {
+				Argon2idWorker.terminate();
+				res(data);
+			}
+
+			Argon2idWorker.postMessage([message, salt, t, m, p, l]);
+		}else{
+			res(argon2id_hash(message, salt, t, m, p, l));
+		}
+	});
+
+	static hashEncoded = (message, salt = Argon2id.randomSalt(), t=2, m=32, p=3, l=32) => new Promise((res, rej) => {
+		this.hash(message, salt, t, m, p, l).then(output => {
+			res(`$argon2id$v=19$m=${m},t=${t},p=${p}$${btoa(salt).replaceAll("=", "")}$${this.hexToBase64(output).replaceAll("=", "")}`);
+		});
+	});
 
 	static hashDecode(hashEncoded){
 		let digest = hashEncoded.split('$')[5];
 		return this.base64ToHex(digest).toLowerCase();
 	}
 
-	static verify(hashEncoded, message){
+	static verify = (hashEncoded, message) => new Promise((res, rej) => {
 		let hea = hashEncoded.split('$');
 		if(hea.length != 6) return false;
 		if(hea[1] != "argon2id") return false;
@@ -81,7 +92,8 @@ export default class Argon2id{
 		let digest = Argon2id.hashDecode(hashEncoded);
 
 
-		let output = Argon2id.hash(message, salt, t, m, p, digest.length/2);
-		return output === digest;
-	}
+		Argon2id.hash(message, salt, t, m, p, digest.length/2).then(output => {
+			res(output === digest);
+		});
+	});
 }
