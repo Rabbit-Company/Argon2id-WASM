@@ -2,7 +2,8 @@ import Argon2id from './Argon2id.js';
 
 document.getElementById('salt').value = Argon2id.randomSalt();
 
-document.getElementById('start').addEventListener('click', () => {
+document.getElementById('hashForm').addEventListener('submit', (e) => {
+	e.preventDefault();
 
 	let message = document.getElementById('message').value;
 	let salt = document.getElementById('salt').value;
@@ -23,7 +24,9 @@ document.getElementById('start').addEventListener('click', () => {
 	});
 });
 
-document.getElementById('verify').addEventListener('click', () => {
+document.getElementById('verifyForm').addEventListener('submit', (e) => {
+	e.preventDefault();
+
 	let message = document.getElementById('message2').value;
 	let hashEncoded = document.getElementById('hashEncoded').value;
 

@@ -10,7 +10,7 @@ pub fn to_hex(bytes: &[u8]) -> String {
 }
 
 #[wasm_bindgen]
-pub fn argon2id_hash(message: String, salt: String, iterations: u32, memory: u32, parallelism: u32, length: usize) -> Result<String, JsValue>{
+pub fn argon2id_hash(message: String, salt: String, parallelism: u32, memory: u32, iterations: u32, length: usize) -> Result<String, JsValue>{
 
 	let argon2id: Argon2 = Argon2::new(
 		Algorithm::Argon2id,

@@ -48,7 +48,9 @@ export default class Argon2id{
 		return salt.join("");
 	}
 
-	static hash = (message, salt = Argon2id.randomSalt(), t=2, m=32, p=3, l=32) => new Promise((res, rej) => {
+	static hash = (message, salt = Argon2id.randomSalt(), p=4, m=16, t=3, l=32) => new Promise((res, rej) => {
+		if(m <= 20) m = Math.pow(2, m);
+
 		if(window.Worker){
 			const Argon2idWorker = new Worker("Argon2idWorker.js", { type: 'module' });
 
@@ -58,18 +60,19 @@ export default class Argon2id{
 				res(data.output);
 			}
 
-			Argon2idWorker.postMessage([message, salt, t, m, p, l]);
+			Argon2idWorker.postMessage([message, salt, p, m, t, l]);
 		}else{
 			init().then(() => {
-				res(argon2id_hash(message, salt, t, m, p, l));
+				res(argon2id_hash(message, salt, p, m, t, l));
 			}).catch(err => {
 				rej(err);
 			});
 		}
 	});
 
-	static hashEncoded = (message, salt = Argon2id.randomSalt(), t=2, m=32, p=3, l=32) => new Promise((res, rej) => {
-		this.hash(message, salt, t, m, p, l).then(output => {
+	static hashEncoded = (message, salt = Argon2id.randomSalt(), p=4, m=16, t=3, l=32) => new Promise((res, rej) => {
+		if(m <= 20) m = Math.pow(2, m);
+		this.hash(message, salt, p, m, t, l).then(output => {
 			res(`$argon2id$v=19$m=${m},t=${t},p=${p}$${btoa(salt).replaceAll("=", "")}$${this.hexToBase64(output).replaceAll("=", "")}`);
 		}).catch(err => {
 			rej(err);
@@ -83,12 +86,12 @@ export default class Argon2id{
 
 	static verify = (hashEncoded, message) => new Promise((res, rej) => {
 		let hea = hashEncoded.split('$');
-		if(hea.length != 6) return false;
-		if(hea[1] != "argon2id") return false;
-		if(hea[2] != "v=19") return false;
+		if(hea.length != 6) rej("invalid hash");
+		if(hea[1] != "argon2id") rej("unsupported algorithm");
+		if(hea[2] != "v=19") rej("unsupported version");
 
 		let hpa = hea[3].split(',');
-		if(hpa.length != 3) return false;
+		if(hpa.length != 3) rej("invalid hash");
 
 		let m = hpa[0].split('=')[1];
 		let t = hpa[1].split('=')[1];
@@ -96,8 +99,7 @@ export default class Argon2id{
 		let salt = atob(hea[4]);
 		let digest = Argon2id.hashDecode(hashEncoded);
 
-
-		Argon2id.hash(message, salt, t, m, p, digest.length/2).then(output => {
+		Argon2id.hash(message, salt, p, m, t, digest.length/2).then(output => {
 			res(output === digest);
 		}).catch(err => {
 			rej(err);

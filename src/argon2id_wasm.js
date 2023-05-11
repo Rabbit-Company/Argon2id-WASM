@@ -112,20 +112,20 @@ function takeObject(idx) {
 /**
 * @param {string} message
 * @param {string} salt
-* @param {number} iterations
-* @param {number} memory
 * @param {number} parallelism
+* @param {number} memory
+* @param {number} iterations
 * @param {number} length
 * @returns {string}
 */
-export function argon2id_hash(message, salt, iterations, memory, parallelism, length) {
+export function argon2id_hash(message, salt, parallelism, memory, iterations, length) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         const ptr0 = passStringToWasm0(message, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len0 = WASM_VECTOR_LEN;
         const ptr1 = passStringToWasm0(salt, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len1 = WASM_VECTOR_LEN;
-        wasm.argon2id_hash(retptr, ptr0, len0, ptr1, len1, iterations, memory, parallelism, length);
+        wasm.argon2id_hash(retptr, ptr0, len0, ptr1, len1, parallelism, memory, iterations, length);
         var r0 = getInt32Memory0()[retptr / 4 + 0];
         var r1 = getInt32Memory0()[retptr / 4 + 1];
         var r2 = getInt32Memory0()[retptr / 4 + 2];
