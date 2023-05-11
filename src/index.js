@@ -1,4 +1,4 @@
-import Argon2id from './Argon2id.js';
+import Argon2id from './argon2id.js';
 
 document.getElementById('salt').value = Argon2id.randomSalt();
 

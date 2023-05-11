@@ -52,7 +52,7 @@ export default class Argon2id{
 		if(m <= 20) m = Math.pow(2, m);
 
 		if(window.Worker){
-			const Argon2idWorker = new Worker("Argon2idWorker.js", { type: 'module' });
+			const Argon2idWorker = new Worker("argon2id_worker.js", { type: 'module' });
 
 			Argon2idWorker.onmessage = ({data}) => {
 				Argon2idWorker.terminate();

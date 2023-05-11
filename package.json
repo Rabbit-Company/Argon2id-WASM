@@ -1,0 +1,43 @@
+{
+	"name": "@rabbit-company/argon2id",
+	"version": "1.0.0",
+	"description": "Argon2id hash function",
+	"main": "./src/argon2id.js",
+	"type": "module",
+	"homepage": "https://github.com/Rabbit-Company/Argon2id-JS",
+	"funding": "https://rabbit-company.com/donation",
+	"author": "Rabbit Company <info@rabbit-company.com>",
+	"license": "MIT",
+	"private": false,
+	"scripts": {
+		"build": "rabbit-builder"
+	},
+	"files": [
+		"src/argon2id_wasm_bg.wasm",
+		"src/argon2id_wasm.js",
+		"src/argon2id_worker.js",
+		"src/argon2id.js"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Rabbit-Company/Argon2id-JS.git"
+	},
+	"contributors": [
+		"Rabbit Company <info@rabbit-company.com> (https://github.com/Rabbit-Company)"
+	],
+	"bugs": {
+		"url": "https://github.com/Rabbit-Company/Argon2id-JS/issues",
+		"email": "info@rabbit-company.com"
+	},
+	"keywords": [
+		"argon2",
+		"argon2id",
+		"password",
+		"hash",
+		"function",
+		"security"
+	],
+	"devDependencies": {
+		"@rabbit-company/rabbit-builder": "^1.0.5"
+	}
+}
