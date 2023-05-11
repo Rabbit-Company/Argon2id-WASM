@@ -22,9 +22,9 @@ import Argon2id from "@rabbit-company/argon2id";
   1. Message (String)
   2. Salt (String) <>
   3. Parallelism Factor (Int) <4> (Min = 1)
-  4. Memory Cost (Int) <16> (Min = 32)
+  4. Memory Cost (Int) <16> (Min = 2)
   5. Iterations (Int) <3> (Min = 1)
-  6. Length (Int) <32> (Min = 1)
+  6. Length (Int) <32> (Min = 4)
 
 */
 
