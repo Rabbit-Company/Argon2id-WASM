@@ -9,11 +9,11 @@ document.getElementById('hashForm').addEventListener('submit', (e) => {
 	let salt = document.getElementById('salt').value;
 	let p = document.getElementById('p').value;
 	let m = document.getElementById('m').value;
-	let i = document.getElementById('i').value;
+	let t = document.getElementById('t').value;
 	let l = document.getElementById('l').value;
 
 	let timerStart = Date.now();
-	Argon2id.hashEncoded(message, salt, i, m, p, l).then(hashEncoded => {
+	Argon2id.hashEncoded(message, salt, p, m, t, l).then(hashEncoded => {
 		let hashHex = Argon2id.hashDecode(hashEncoded);
 		let timerEnd = calcT(timerStart);
 		document.getElementById('hash').innerHTML = "<b>Hash:</b> " + hashHex + "<br/><b>Hash Encoded:</b> " + hashEncoded;
