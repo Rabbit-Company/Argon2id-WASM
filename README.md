@@ -1,6 +1,6 @@
 # Argon2id-WASM
 
-Argon2id implementation in JavaScript (ES6).
+Argon2id implementation in JavaScript (ES6, WASM, Rust).
 
 ## Usage
 
@@ -45,7 +45,7 @@ Argon2id.hashEncoded("message").then(hashEncoded => {
 });
 
 // To get hash from hashEncoded function you can use function called hashDecode
-Argon2id.hashDecode("$argon2id$v=19$m=65536,t=4,p=3$ZXJXNGFMWXExdjc4YjZvNQ$qHu6VZY8Q+z71hOVOChwwGrFVYAnvrW21RFZU+TCOKM");
+Argon2id.hashDecode("$argon2id$v=19$m=65536,t=3,p=4$OVg1TXI3eTlzcnc2SjIxNw$LtPyv2bn74MJPui2JBPXWx5jXMd1uUv3515emrYSlhM");
 
 // Generate hash from the provided message and salt
 Argon2id.hash("message", "3yBtO1brz26g074n").then(hash => {
@@ -62,7 +62,7 @@ Argon2id.hashEncoded("message", Argon2id.randomSalt()).then(hashEncoded => {
 });
 
 // Generate hash from the provided message, salt, iterations, memory cost, parallelism factor and hash length
-Argon2id.hashEncoded("message", Argon2id.randomSalt(), 2, 16, 3, 32).then(hashEncoded => {
+Argon2id.hashEncoded("message", Argon2id.randomSalt(), 4, 16, 3, 32).then(hashEncoded => {
   console.log("Encoded Hash: " + hashEncoded);
 }).catch(err => {
   console.log("Error: " + err);
@@ -70,7 +70,7 @@ Argon2id.hashEncoded("message", Argon2id.randomSalt(), 2, 16, 3, 32).then(hashEn
 
 // To validate the message you can use verify function.
 // This function accept hashEncoded and message.
-Argon2id.verify("$argon2id$v=19$m=65536,t=4,p=3$ZXJXNGFMWXExdjc4YjZvNQ$qHu6VZY8Q+z71hOVOChwwGrFVYAnvrW21RFZU+TCOKM", "test").then(match => {
+Argon2id.verify("$argon2id$v=19$m=65536,t=3,p=4$OVg1TXI3eTlzcnc2SjIxNw$LtPyv2bn74MJPui2JBPXWx5jXMd1uUv3515emrYSlhM", "vbFI6Dfihsw?QnxYOhYxzpxu&vYzTa").then(match => {
   if(match) console.log("Message is valid.");
   if(!match) console.log("Message is not valid.");
 }).catch(err => {
