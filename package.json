@@ -4,7 +4,7 @@
 	"description": "Argon2id hash function",
 	"main": "./src/argon2id.js",
 	"type": "module",
-	"homepage": "https://github.com/Rabbit-Company/Argon2id-JS",
+	"homepage": "https://github.com/Rabbit-Company/Argon2id-WASM",
 	"funding": "https://rabbit-company.com/donation",
 	"author": "Rabbit Company <info@rabbit-company.com>",
 	"license": "MIT",
@@ -21,13 +21,13 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Rabbit-Company/Argon2id-JS.git"
+		"url": "git+https://github.com/Rabbit-Company/Argon2id-WASM.git"
 	},
 	"contributors": [
 		"Rabbit Company <info@rabbit-company.com> (https://github.com/Rabbit-Company)"
 	],
 	"bugs": {
-		"url": "https://github.com/Rabbit-Company/Argon2id-JS/issues",
+		"url": "https://github.com/Rabbit-Company/Argon2id-WASM/issues",
 		"email": "info@rabbit-company.com"
 	},
 	"keywords": [
