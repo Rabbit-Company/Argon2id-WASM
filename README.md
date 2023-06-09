@@ -71,8 +71,11 @@ Argon2id.hashEncoded("message", Argon2id.randomSalt(), 4, 16, 3, 32).then(hashEn
 // To validate the message you can use verify function.
 // This function accept hashEncoded and message.
 Argon2id.verify("$argon2id$v=19$m=65536,t=3,p=4$OVg1TXI3eTlzcnc2SjIxNw$LtPyv2bn74MJPui2JBPXWx5jXMd1uUv3515emrYSlhM", "vbFI6Dfihsw?QnxYOhYxzpxu&vYzTa").then(match => {
-  if(match) console.log("Message is valid.");
-  if(!match) console.log("Message is not valid.");
+  if(match){
+    console.log("Message is valid.");
+  }else{
+    console.log("Message is not valid.");
+  }
 }).catch(err => {
   console.log("Error: " + err);
 });
