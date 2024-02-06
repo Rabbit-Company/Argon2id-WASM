@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Argon2id-WASM</title>
+	</head>
+	<body>
+		<h1><a href="https://github.com/Rabbit-Company/Argon2id-WASM" target="_blank">Argon2id-WASM</a></h1>
+		<form id="hashForm">
+			<textarea id="message" rows="5" cols="50"></textarea></br></br>
+			<label>Salt: </label><input id="salt" type="text" placeholder="Salt" required><br/>
+			<label>Parallelism Factor: </label><input id="p" type="number" min="1" max="224" value="4" placeholder="p" required><br/>
+			<label>Memory Cost: </label><input id="m" type="number" min="2" max="1048576" value="16" placeholder="m" required><br/>
+			<label>Iterations: </label><input id="t" type="number" min="1" max="100" value="3" placeholder="t" required><br/>
+			<label>Hash Length: </label><input id="l" type="number" min="4" max="65536" value="32" placeholder="l" required><br/><br/>
+			<button type="submit">Hash</button>
+		</form>
+		<p id="hash"></p>
+
+		<h1>Validator</h1>
+		<form id="verifyForm">
+			<textarea id="message2" rows="5" cols="50"></textarea></br></br>
+			<label>Hash Encoded: </label><input id="hashEncoded" type="text" placeholder="$argon2id$v=19$m=65536,t=3,p=4$OVg1TXI3eTlzcnc2SjIxNw$LtPyv2bn74MJPui2JBPXWx5jXMd1uUv3515emrYSlhM" required><br/></br>
+			<button type="submit">Validate</button>
+		</form>
+		<p id="validate"></p>
+
+		<h1>Performance</h1>
+		<p id="perf"></p>
+
+		<script type="module" src="index.js"></script>
+	</body>
+</html>
