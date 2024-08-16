@@ -231,26 +231,35 @@ var Argon2id;
     return salt.join("");
   }
   Argon2id.randomSalt = randomSalt;
-  Argon2id.hash = (message, salt = Argon2id.randomSalt(), p = 4, m = 16, t = 3, l = 32) => new Promise((res, rej) => {
+  Argon2id.hash = async (message, salt = Argon2id.randomSalt(), p = 4, m = 16, t = 3, l = 32) => {
     if (m <= 20)
       m = Math.pow(2, m);
-    if (window.Worker) {
-      const Argon2idWorker = new Worker("argon2id_worker.js", { type: "module" });
-      Argon2idWorker.onmessage = ({ data }) => {
-        Argon2idWorker.terminate();
-        if (data.error)
-          rej(data.error);
-        res(data.output);
-      };
-      Argon2idWorker.postMessage([message, salt, p, m, t, l]);
-    } else {
-      argon2id_wasm_default().then(() => {
-        res(argon2id_hash(message, salt, p, m, t, l));
-      }).catch((err) => {
-        rej(err);
+    const fallbackToWasm = async () => {
+      await argon2id_wasm_default();
+      return argon2id_hash(message, salt, p, m, t, l);
+    };
+    try {
+      if (!window.Worker)
+        return fallbackToWasm();
+      const response = await fetch("argon2id_worker.js", { method: "HEAD" });
+      if (!response.ok)
+        return fallbackToWasm();
+      return await new Promise((resolve, reject) => {
+        const Argon2idWorker = new Worker("argon2id_worker.js", { type: "module" });
+        Argon2idWorker.onmessage = ({ data }) => {
+          Argon2idWorker.terminate();
+          data.error ? reject(data.error) : resolve(data.output);
+        };
+        Argon2idWorker.onerror = (error) => {
+          Argon2idWorker.terminate();
+          reject(`Worker error: ${error.message}`);
+        };
+        Argon2idWorker.postMessage([message, salt, p, m, t, l]);
       });
+    } catch {
+      return fallbackToWasm();
     }
-  });
+  };
   Argon2id.hashEncoded = (message, salt = Argon2id.randomSalt(), p = 4, m = 16, t = 3, l = 32) => new Promise((res, rej) => {
     if (m <= 20)
       m = Math.pow(2, m);

@@ -108,30 +108,46 @@ namespace Argon2id {
 	 * @param {number} [l=32] - The desired length of the resulting hash in bytes.
 	 * @returns {Promise<string>} A promise that resolves to the hash of the message in hexadecimal format.
 	 */
-	export const hash = (message: string, salt: string = Argon2id.randomSalt(), p: number = 4, m: number = 16, t: number = 3, l: number = 32): Promise<string> =>
-		new Promise((res, rej) => {
-			if (m <= 20) m = Math.pow(2, m);
+	export const hash = async (
+		message: string,
+		salt: string = Argon2id.randomSalt(),
+		p: number = 4,
+		m: number = 16,
+		t: number = 3,
+		l: number = 32
+	): Promise<string> => {
+		if (m <= 20) m = Math.pow(2, m);
 
-			if (window.Worker) {
+		const fallbackToWasm = async () => {
+			await init();
+			return argon2id_hash(message, salt, p, m, t, l);
+		};
+
+		try {
+			if (!window.Worker) return fallbackToWasm();
+
+			const response = await fetch("argon2id_worker.js", { method: "HEAD" });
+			if (!response.ok) return fallbackToWasm();
+
+			return await new Promise<string>((resolve, reject) => {
 				const Argon2idWorker = new Worker("argon2id_worker.js", { type: "module" });
 
 				Argon2idWorker.onmessage = ({ data }) => {
 					Argon2idWorker.terminate();
-					if (data.error) rej(data.error);
-					res(data.output);
+					data.error ? reject(data.error) : resolve(data.output);
+				};
+
+				Argon2idWorker.onerror = (error) => {
+					Argon2idWorker.terminate();
+					reject(`Worker error: ${error.message}`);
 				};
 
 				Argon2idWorker.postMessage([message, salt, p, m, t, l]);
-			} else {
-				init()
-					.then(() => {
-						res(argon2id_hash(message, salt, p, m, t, l));
-					})
-					.catch((err) => {
-						rej(err);
-					});
-			}
-		});
+			});
+		} catch {
+			return fallbackToWasm();
+		}
+	};
 
 	/**
 	 * Hashes a message using the Argon2id algorithm and encodes it in a specific format.
