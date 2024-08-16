@@ -1,52 +1,52 @@
 {
-  "name": "@rabbit-company/argon2id",
-  "version": "2.0.0",
-  "description": "Argon2id hash function",
-  "main": "./module/argon2id.js",
+	"name": "@rabbit-company/argon2id",
+	"version": "2.0.0",
+	"description": "Argon2id hash function",
+	"main": "./module/argon2id.js",
 	"browser": "./module/argon2id.js",
-  "type": "module",
-  "homepage": "https://github.com/Rabbit-Company/Argon2id-WASM",
-  "funding": "https://rabbit-company.com/donation",
-  "author": "Rabbit Company <info@rabbit-company.com>",
-  "license": "MIT",
-  "private": false,
-  "scripts": {
-    "build-rust": "cargo update && cargo build --release --target wasm32-unknown-unknown && wasm-pack build --target web --out-name argon2id_wasm --scope rabbit-company",
-    "build": "bun run build.ts"
-  },
-  "files": [
-    "module/argon2id_wasm_bg.wasm",
+	"type": "module",
+	"homepage": "https://github.com/Rabbit-Company/Argon2id-WASM",
+	"funding": "https://rabbit-company.com/donation",
+	"author": "Rabbit Company <info@rabbit-company.com>",
+	"license": "MIT",
+	"private": false,
+	"scripts": {
+		"build-rust": "cargo update && cargo build --release --target wasm32-unknown-unknown && wasm-pack build --target web --out-name argon2id_wasm --scope rabbit-company",
+		"build": "bun run build.ts"
+	},
+	"files": [
+		"module/argon2id_wasm_bg.wasm",
 		"module/argon2id_worker.d.ts",
-    "module/argon2id_worker.js",
+		"module/argon2id_worker.js",
 		"module/argon2id.d.ts",
-    "module/argon2id.js"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Rabbit-Company/Argon2id-WASM.git"
-  },
-  "contributors": [
-    "Rabbit Company <info@rabbit-company.com> (https://github.com/Rabbit-Company)"
-  ],
-  "bugs": {
-    "url": "https://github.com/Rabbit-Company/Argon2id-WASM/issues",
-    "email": "info@rabbit-company.com"
-  },
-  "keywords": [
-    "argon2",
-    "argon2id",
-    "password",
-    "hash",
-    "function",
-    "security"
-  ],
-  "devDependencies": {
-    "@types/bun": "latest",
-    "bun-plugin-dts": "^0.2.1",
-		"wasm-pack": "^0.12.1",
-    "@rabbit-company/logger": "^3.1.0"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  }
+		"module/argon2id.js"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Rabbit-Company/Argon2id-WASM.git"
+	},
+	"contributors": [
+		"Rabbit Company <info@rabbit-company.com> (https://github.com/Rabbit-Company)"
+	],
+	"bugs": {
+		"url": "https://github.com/Rabbit-Company/Argon2id-WASM/issues",
+		"email": "info@rabbit-company.com"
+	},
+	"keywords": [
+		"argon2",
+		"argon2id",
+		"password",
+		"hash",
+		"function",
+		"security"
+	],
+	"devDependencies": {
+		"@types/bun": "latest",
+		"bun-plugin-dts": "^0.2.3",
+		"wasm-pack": "^0.13.0",
+		"@rabbit-company/logger": "^4.0.0"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	}
 }

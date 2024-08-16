@@ -1,23 +1,23 @@
 // src/argon2id_wasm.js
-var getUint8Memory0 = function() {
+function getUint8Memory0() {
   if (cachedUint8Memory0 === null || cachedUint8Memory0.byteLength === 0) {
     cachedUint8Memory0 = new Uint8Array(wasm.memory.buffer);
   }
   return cachedUint8Memory0;
-};
-var getStringFromWasm0 = function(ptr, len) {
+}
+function getStringFromWasm0(ptr, len) {
   ptr = ptr >>> 0;
   return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
-};
-var addHeapObject = function(obj) {
+}
+function addHeapObject(obj) {
   if (heap_next === heap.length)
     heap.push(heap.length + 1);
   const idx = heap_next;
   heap_next = heap[idx];
   heap[idx] = obj;
   return idx;
-};
-var passStringToWasm0 = function(arg, malloc, realloc) {
+}
+function passStringToWasm0(arg, malloc, realloc) {
   if (realloc === undefined) {
     const buf = cachedTextEncoder.encode(arg);
     const ptr2 = malloc(buf.length, 1) >>> 0;
@@ -46,27 +46,27 @@ var passStringToWasm0 = function(arg, malloc, realloc) {
   }
   WASM_VECTOR_LEN = offset;
   return ptr;
-};
-var getInt32Memory0 = function() {
+}
+function getInt32Memory0() {
   if (cachedInt32Memory0 === null || cachedInt32Memory0.byteLength === 0) {
     cachedInt32Memory0 = new Int32Array(wasm.memory.buffer);
   }
   return cachedInt32Memory0;
-};
-var getObject = function(idx) {
+}
+function getObject(idx) {
   return heap[idx];
-};
-var dropObject = function(idx) {
+}
+function dropObject(idx) {
   if (idx < 132)
     return;
   heap[idx] = heap_next;
   heap_next = idx;
-};
-var takeObject = function(idx) {
+}
+function takeObject(idx) {
   const ret = getObject(idx);
   dropObject(idx);
   return ret;
-};
+}
 function argon2id_hash(message, salt, parallelism, memory, iterations, length) {
   let deferred4_0;
   let deferred4_1;
@@ -120,7 +120,7 @@ async function __wbg_load(module, imports) {
     }
   }
 }
-var __wbg_get_imports = function() {
+function __wbg_get_imports() {
   const imports = {};
   imports.wbg = {};
   imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
@@ -128,16 +128,16 @@ var __wbg_get_imports = function() {
     return addHeapObject(ret);
   };
   return imports;
-};
-var __wbg_init_memory = function(imports, maybe_memory) {
-};
-var __wbg_finalize_init = function(instance, module) {
+}
+function __wbg_init_memory(imports, maybe_memory) {
+}
+function __wbg_finalize_init(instance, module) {
   wasm = instance.exports;
   __wbg_init.__wbindgen_wasm_module = module;
   cachedInt32Memory0 = null;
   cachedUint8Memory0 = null;
   return wasm;
-};
+}
 async function __wbg_init(input) {
   if (wasm !== undefined)
     return wasm;
@@ -181,13 +181,15 @@ var cachedInt32Memory0 = null;
 var argon2id_wasm_default = __wbg_init;
 
 // src/argon2id.ts
-class Argon2id {
-  static hexToBase64(hexstring) {
+var Argon2id;
+((Argon2id) => {
+  function hexToBase64(hexstring) {
     return btoa((hexstring.match(/\w{2}/g) || []).map(function(a) {
       return String.fromCharCode(parseInt(a, 16));
     }).join(""));
   }
-  static base64ToHex(str) {
+  Argon2id.hexToBase64 = hexToBase64;
+  function base64ToHex(str) {
     const raw = atob(str);
     let result = "";
     for (let i = 0;i < raw.length; i++) {
@@ -196,7 +198,8 @@ class Argon2id {
     }
     return result.toUpperCase();
   }
-  static randRange(min, max) {
+  Argon2id.base64ToHex = base64ToHex;
+  function randRange(min, max) {
     var range = max - min;
     var requestBytes = Math.ceil(Math.log2(range) / 8);
     if (!requestBytes)
@@ -212,21 +215,23 @@ class Argon2id {
         return min + val % range;
     }
   }
-  static randomSalt() {
+  Argon2id.randRange = randRange;
+  function randomSalt() {
     let length = 16;
     let lcase = "abcdefghijklmnopqrstuvwxyz";
     let ucase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     let numb = "1234567890";
     let salt = [];
     for (let i = 0;i < length; i++)
-      salt.push(lcase.charAt(this.randRange(0, lcase.length)));
+      salt.push(lcase.charAt(randRange(0, lcase.length)));
     for (let i = 0;i < length / 2; i++)
-      salt[this.randRange(0, salt.length)] = ucase.charAt(this.randRange(0, ucase.length));
+      salt[randRange(0, salt.length)] = ucase.charAt(randRange(0, ucase.length));
     for (let i = 0;i < length / 2; i++)
-      salt[this.randRange(0, salt.length)] = numb.charAt(this.randRange(0, numb.length));
+      salt[randRange(0, salt.length)] = numb.charAt(randRange(0, numb.length));
     return salt.join("");
   }
-  static hash = (message, salt = Argon2id.randomSalt(), p = 4, m = 16, t = 3, l = 32) => new Promise((res, rej) => {
+  Argon2id.randomSalt = randomSalt;
+  Argon2id.hash = (message, salt = Argon2id.randomSalt(), p = 4, m = 16, t = 3, l = 32) => new Promise((res, rej) => {
     if (m <= 20)
       m = Math.pow(2, m);
     if (window.Worker) {
@@ -246,21 +251,22 @@ class Argon2id {
       });
     }
   });
-  static hashEncoded = (message, salt = Argon2id.randomSalt(), p = 4, m = 16, t = 3, l = 32) => new Promise((res, rej) => {
+  Argon2id.hashEncoded = (message, salt = Argon2id.randomSalt(), p = 4, m = 16, t = 3, l = 32) => new Promise((res, rej) => {
     if (m <= 20)
       m = Math.pow(2, m);
-    this.hash(message, salt, p, m, t, l).then((output) => {
-      res(`\$argon2id\$v=19\$m=${m},t=${t},p=${p}\$${btoa(salt).replaceAll("=", "")}\$${this.hexToBase64(output).replaceAll("=", "")}`);
+    Argon2id.hash(message, salt, p, m, t, l).then((output) => {
+      res(`\$argon2id\$v=19\$m=${m},t=${t},p=${p}\$${btoa(salt).replaceAll("=", "")}\$${hexToBase64(output).replaceAll("=", "")}`);
     }).catch((err) => {
       rej(err);
     });
   });
-  static hashDecode(hashEncoded) {
-    let digest = hashEncoded.split("$")[5];
-    return this.base64ToHex(digest).toLowerCase();
+  function hashDecode(hashEncoded2) {
+    let digest = hashEncoded2.split("$")[5];
+    return base64ToHex(digest).toLowerCase();
   }
-  static verify = (hashEncoded, message) => new Promise((res, rej) => {
-    let hea = hashEncoded.split("$");
+  Argon2id.hashDecode = hashDecode;
+  Argon2id.verify = (hashEncoded2, message) => new Promise((res, rej) => {
+    let hea = hashEncoded2.split("$");
     if (hea.length != 6)
       rej("invalid hash");
     if (hea[1] != "argon2id")
@@ -274,14 +280,15 @@ class Argon2id {
     let t = parseInt(hpa[1].split("=")[1], 10);
     let p = parseInt(hpa[2].split("=")[1], 10);
     let salt = atob(hea[4]);
-    let digest = Argon2id.hashDecode(hashEncoded);
+    let digest = Argon2id.hashDecode(hashEncoded2);
     Argon2id.hash(message, salt, p, m, t, digest.length / 2).then((output) => {
       res(output === digest);
     }).catch((err) => {
       rej(err);
     });
   });
-}
+})(Argon2id ||= {});
+var argon2id_default = Argon2id;
 export {
-  Argon2id as default
+  argon2id_default as default
 };

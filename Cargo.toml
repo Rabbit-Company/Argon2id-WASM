@@ -13,4 +13,4 @@ crate-type = ["cdylib"]
 
 [dependencies]
 argon2 = "0.5.3"
-wasm-bindgen = "0.2.90"
+wasm-bindgen = "0.2.93"

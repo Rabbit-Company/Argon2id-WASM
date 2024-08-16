@@ -1,23 +1,23 @@
 // src/argon2id_wasm.js
-var getUint8Memory0 = function() {
+function getUint8Memory0() {
   if (cachedUint8Memory0 === null || cachedUint8Memory0.byteLength === 0) {
     cachedUint8Memory0 = new Uint8Array(wasm.memory.buffer);
   }
   return cachedUint8Memory0;
-};
-var getStringFromWasm0 = function(ptr, len) {
+}
+function getStringFromWasm0(ptr, len) {
   ptr = ptr >>> 0;
   return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
-};
-var addHeapObject = function(obj) {
+}
+function addHeapObject(obj) {
   if (heap_next === heap.length)
     heap.push(heap.length + 1);
   const idx = heap_next;
   heap_next = heap[idx];
   heap[idx] = obj;
   return idx;
-};
-var passStringToWasm0 = function(arg, malloc, realloc) {
+}
+function passStringToWasm0(arg, malloc, realloc) {
   if (realloc === undefined) {
     const buf = cachedTextEncoder.encode(arg);
     const ptr2 = malloc(buf.length, 1) >>> 0;
@@ -46,27 +46,27 @@ var passStringToWasm0 = function(arg, malloc, realloc) {
   }
   WASM_VECTOR_LEN = offset;
   return ptr;
-};
-var getInt32Memory0 = function() {
+}
+function getInt32Memory0() {
   if (cachedInt32Memory0 === null || cachedInt32Memory0.byteLength === 0) {
     cachedInt32Memory0 = new Int32Array(wasm.memory.buffer);
   }
   return cachedInt32Memory0;
-};
-var getObject = function(idx) {
+}
+function getObject(idx) {
   return heap[idx];
-};
-var dropObject = function(idx) {
+}
+function dropObject(idx) {
   if (idx < 132)
     return;
   heap[idx] = heap_next;
   heap_next = idx;
-};
-var takeObject = function(idx) {
+}
+function takeObject(idx) {
   const ret = getObject(idx);
   dropObject(idx);
   return ret;
-};
+}
 function argon2id_hash(message, salt, parallelism, memory, iterations, length) {
   let deferred4_0;
   let deferred4_1;
@@ -120,7 +120,7 @@ async function __wbg_load(module, imports) {
     }
   }
 }
-var __wbg_get_imports = function() {
+function __wbg_get_imports() {
   const imports = {};
   imports.wbg = {};
   imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
@@ -128,16 +128,16 @@ var __wbg_get_imports = function() {
     return addHeapObject(ret);
   };
   return imports;
-};
-var __wbg_init_memory = function(imports, maybe_memory) {
-};
-var __wbg_finalize_init = function(instance, module) {
+}
+function __wbg_init_memory(imports, maybe_memory) {
+}
+function __wbg_finalize_init(instance, module) {
   wasm = instance.exports;
   __wbg_init.__wbindgen_wasm_module = module;
   cachedInt32Memory0 = null;
   cachedUint8Memory0 = null;
   return wasm;
-};
+}
 async function __wbg_init(input) {
   if (wasm !== undefined)
     return wasm;
