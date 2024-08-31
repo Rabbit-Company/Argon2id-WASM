@@ -193,9 +193,5 @@ var argon2id_wasm_default = __wbg_init;
 
 // src/argon2id_worker.ts
 onmessage = (e) => {
-  argon2id_wasm_default().then(() => {
-    postMessage({ output: argon2id_hash(e.data[0], e.data[1], e.data[2], e.data[3], e.data[4], e.data[5]) });
-  }).catch((error) => {
-    postMessage({ error });
-  });
+  argon2id_wasm_default().then(() => postMessage({ output: argon2id_hash(e.data[0], e.data[1], e.data[2], e.data[3], e.data[4], e.data[5]) })).catch((error) => postMessage({ error }));
 };

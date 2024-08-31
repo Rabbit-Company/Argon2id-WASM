@@ -1,0 +1,17 @@
+{
+	"name": "@rabbit-company/argon2id",
+	"version": "2.0.1",
+	"exports": "./src/argon2id.ts",
+	"publish": {
+		"include": [
+			"LICENSE",
+			"README.md",
+			"src/argon2id.ts",
+			"src/argon2id_worker.ts",
+			"src/argon2id_wasm.js",
+			"src/argon2id_wasm.d.ts",
+			"src/argon2id_wasm_bg.wasm",
+			"src/argon2id_wasm_bg.wasm.d.ts"
+		]
+	}
+}
