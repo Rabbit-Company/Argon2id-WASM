@@ -164,7 +164,14 @@ namespace Argon2id {
 	 * @param {number} [l=32] - The desired length of the resulting hash in bytes.
 	 * @returns {Promise<string>} A promise that resolves to the encoded hash string.
 	 */
-	export const hashEncoded = (message: string, salt = Argon2id.randomSalt(), p = 4, m = 16, t = 3, l = 32): Promise<string> =>
+	export const hashEncoded = (
+		message: string,
+		salt: string = Argon2id.randomSalt(),
+		p: number = 4,
+		m: number = 16,
+		t: number = 3,
+		l: number = 32
+	): Promise<string> =>
 		new Promise((res, rej) => {
 			if (m <= 20) m = Math.pow(2, m);
 			hash(message, salt, p, m, t, l)
