@@ -66,7 +66,7 @@ namespace Argon2id {
 		var ar = new Uint8Array(requestBytes);
 
 		while (true) {
-			window.crypto.getRandomValues(ar);
+			globalThis.crypto.getRandomValues(ar);
 			var val = 0;
 			for (var i = 0; i < requestBytes; i++) val = (val << 8) + ar[i];
 			if (val < maxNum - (maxNum % range)) return min + (val % range);
@@ -124,7 +124,7 @@ namespace Argon2id {
 		};
 
 		try {
-			if (!window.Worker) return fallbackToWasm();
+			if (!globalThis.Worker) return fallbackToWasm();
 
 			const response = await fetch("argon2id_worker.js", { method: "HEAD" });
 			if (!response.ok) return fallbackToWasm();
