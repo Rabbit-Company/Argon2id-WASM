@@ -1,6 +1,6 @@
 {
 	"name": "@rabbit-company/argon2id",
-	"version": "2.0.1",
+	"version": "2.1.0",
 	"exports": "./src/argon2id.ts",
 	"publish": {
 		"include": [

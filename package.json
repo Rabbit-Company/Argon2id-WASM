@@ -1,6 +1,6 @@
 {
 	"name": "@rabbit-company/argon2id",
-	"version": "2.0.1",
+	"version": "2.1.0",
 	"description": "Argon2id hash function",
 	"main": "./module/argon2id.js",
 	"browser": "./module/argon2id.js",
@@ -41,12 +41,12 @@
 		"security"
 	],
 	"devDependencies": {
-		"@types/bun": "^1.1.8",
+		"@types/bun": "^1.1.9",
 		"bun-plugin-dts": "^0.2.3",
 		"wasm-pack": "^0.13.0",
 		"@rabbit-company/logger": "^4.0.0"
 	},
 	"peerDependencies": {
-		"typescript": "^5.5.4"
+		"typescript": "^5.6.2"
 	}
 }
