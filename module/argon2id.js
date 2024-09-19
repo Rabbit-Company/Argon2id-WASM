@@ -218,7 +218,7 @@ var Argon2id;
     var maxNum = Math.pow(256, requestBytes);
     var ar = new Uint8Array(requestBytes);
     while (true) {
-      window.crypto.getRandomValues(ar);
+      globalThis.crypto.getRandomValues(ar);
       var val = 0;
       for (var i = 0;i < requestBytes; i++)
         val = (val << 8) + ar[i];
@@ -250,7 +250,7 @@ var Argon2id;
       return argon2id_hash(message, salt, p, m, t, l);
     };
     try {
-      if (!window.Worker)
+      if (!globalThis.Worker)
         return fallbackToWasm();
       const response = await fetch("argon2id_worker.js", { method: "HEAD" });
       if (!response.ok)
